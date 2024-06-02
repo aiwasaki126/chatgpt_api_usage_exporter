@@ -12,8 +12,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - PORT=3000
     ports:
-      - '8080:8080'
+      - '3000:3000'
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     networks:
