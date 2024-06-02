@@ -11,7 +11,8 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /src/main .
 
-EXPOSE 8080
+ARG PORT=8080
+ENV PORT=${PORT}
+EXPOSE ${PORT}
 
-ENTRYPOINT [ "./main" ]
-
+ENTRYPOINT [ "sh", "-c", "./main --port ${PORT}" ]
