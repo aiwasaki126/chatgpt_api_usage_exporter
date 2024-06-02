@@ -7,7 +7,7 @@ This exporter retrieves the usage metrics from the ChatGPT API and exports them 
 
 The metrics are daily usage counts (ex. total number of requests) for the ChatGPT API. So the metrics are initialized to 0 at the beginning of the day.
 
-> [!Notification]
+> [!Warning]
 >
 > This exporter uses the usage API endpoint `https://api.openai.com/v1/usage` that is not officially written in the OpenAI API reference.
 > So, the usage API endpoint may be changed or removed in the future.
