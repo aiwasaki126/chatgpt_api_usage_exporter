@@ -1,0 +1,206 @@
+swagger: '2.0'
+info:
+  title: ChatGPT API Usage
+  version: 1.0.0
+host: api.openai.com
+basePath: /v1
+schemes:
+  - https
+paths:
+  /usage:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - description: Date for which usage is to be fetched
+          format: date
+          in: query
+          name: date
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/usage_response'
+        '400':
+          description: Invalid request error
+          schema:
+            $ref: '#/definitions/error_response'
+        '500':
+          description: Internal server error
+      description: Get the usage of the API for a specific date
+      summary: Get API usage
+definitions:
+  data:
+    properties:
+      aggregation_timestamp:
+        description: Aggregation timestamp
+        example: 1716811620
+        type: integer
+      api_key_id:
+        description: API key ID
+        type: string
+        x-nullable: true
+      api_key_name:
+        description: API key name
+        type: string
+        x-nullable: true
+      api_key_redacted:
+        description: API key redacted
+        type: string
+        x-nullable: true
+      api_key_type:
+        description: API key type
+        type: string
+        x-nullable: true
+      email:
+        description: Email
+        type: string
+        x-nullable: true
+      n_context_tokens_total:
+        description: Number of context tokens
+        example: 1000
+        type: integer
+      n_generated_tokens_total:
+        description: Number of generated tokens
+        example: 1000
+        type: integer
+      n_requests:
+        description: Number of requests
+        example: 100
+        type: integer
+      operation:
+        description: Operation
+        example: completion
+        type: string
+      organization_id:
+        description: Organization ID
+        example: org-1234
+        type: string
+      organization_name:
+        description: Organization name
+        example: OpenAI
+        type: string
+      project_id:
+        description: Project ID
+        type: string
+        x-nullable: true
+      project_name:
+        description: Project name
+        type: string
+        x-nullable: true
+      snapshot_id:
+        description: Model snapshot ID
+        example: gpt-3.5-turbo-16k-0613
+        type: string
+    required:
+      - organization_id
+      - organization_name
+      - aggregation_timestamp
+      - n_requests
+      - operation
+      - snapshot_id
+      - n_context_tokens_total
+      - n_generated_tokens_total
+    type: object
+  error_detail:
+    properties:
+      code:
+        description: Error code
+        type: integer
+        x-nullable: true
+      errors:
+        items:
+          properties:
+            field:
+              description: Field name
+              type: string
+            message:
+              description: Error message
+              type: string
+          type: object
+        type: array
+      message:
+        description: Error message
+        example: Missing query parameter 'date'
+        type: string
+      param:
+        description: Error parameter
+        type: string
+        x-nullable: true
+      type:
+        description: Error type
+        example: invalid_request_error
+        type: string
+    required:
+      - message
+      - type
+    type: object
+  error_response:
+    properties:
+      error:
+        $ref: '#/definitions/error_detail'
+    required:
+      - error
+    type: object
+  usage_response:
+    properties:
+      assistant_code_interpreter_data:
+        description: Assistant Code Interpreter API data array
+        items:
+          description: Assistant Code Interpreter API details
+          type: object
+        type: array
+      dalle_api_data:
+        description: DALL-E API data array
+        items:
+          description: DALL-E API details
+          type: object
+        type: array
+      data:
+        description: Usage data array
+        items:
+          $ref: '#/definitions/data'
+        type: array
+      object:
+        description: Object type
+        example: list
+        type: string
+      retrieval_storage_data:
+        description: Retrieval Storage data array
+        items:
+          description: Retrieval Storage details
+          type: object
+        type: array
+      tpm_data:
+        description: TPM data array
+        items:
+          description: TPM details
+          type: object
+        type: array
+      tts_api_data:
+        description: TTS API data array
+        items:
+          description: TTS API details
+          type: object
+        type: array
+      whisper_api_data:
+        description: Whisper API data array
+        items:
+          description: Whisper API details
+          type: object
+        type: array
+    required:
+      - object
+      - data
+    type: object
+securityDefinitions:
+  apiKey:
+    in: header
+    name: Authorization
+    type: apiKey
+security:
+  - apiKey: []
+x-components: {}
+

@@ -1,0 +1,208 @@
+openapi: 3.0.0
+info:
+  title: ChatGPT API Usage
+  version: 1.0.0
+servers:
+  - url: https://api.openai.com/v1
+    description: OpenAI API
+security:
+  - apiKey: []
+paths:
+  /usage:
+    get:
+      summary: Get API usage
+      description: Get the usage of the API for a specific date
+      parameters:
+        - name: date
+          in: query
+          description: Date for which usage is to be fetched
+          required: true
+          schema:
+            type: string
+            format: date
+            example: '2022-01-01'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usage_response'
+        '400':
+          description: Invalid request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response'
+        '500':
+          description: Internal server error
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    usage_response:
+      type: object
+      properties:
+        object:
+          type: string
+          description: Object type
+          example: 'list'
+        data:
+          type: array
+          description: Usage data array
+          items:
+            $ref: '#/components/schemas/data'
+        tpm_data:
+          type: array
+          description: TPM data array
+          items:
+            type: object
+            description: TPM details
+        dalle_api_data:
+          type: array
+          description: DALL-E API data array
+          items:
+            type: object
+            description: DALL-E API details
+        whisper_api_data:
+          type: array
+          description: Whisper API data array
+          items:
+            type: object
+            description: Whisper API details
+        tts_api_data:
+          type: array
+          description: TTS API data array
+          items:
+            type: object
+            description: TTS API details
+        assistant_code_interpreter_data:
+          type: array
+          description: Assistant Code Interpreter API data array
+          items:
+            type: object
+            description: Assistant Code Interpreter API details
+        retrieval_storage_data:
+          type: array
+          description: Retrieval Storage data array
+          items:
+            type: object
+            description: Retrieval Storage details
+      required:
+        - object
+        - data
+    data:
+      type: object
+      properties:
+        organization_id:
+          type: string
+          description: Organization ID
+          example: 'org-1234'
+        organization_name:
+          type: string
+          description: Organization name
+          example: 'OpenAI'
+        aggregation_timestamp:
+          type: integer
+          description: Aggregation timestamp
+          example: 1716811620
+        n_requests:
+          type: integer
+          description: Number of requests
+          example: 100
+        operation:
+          type: string
+          description: Operation
+          example: 'completion'
+        snapshot_id:
+          type: string
+          description: Model snapshot ID
+          example: gpt-3.5-turbo-16k-0613
+        n_context_tokens_total:
+          type: integer
+          description: Number of context tokens
+          example: 1000
+        n_generated_tokens_total:
+          type: integer
+          description: Number of generated tokens
+          example: 1000
+        email:
+          type: string
+          description: Email
+          nullable: true
+        api_key_id:
+          type: string
+          description: API key ID
+          nullable: true
+        api_key_name:
+          type: string
+          description: API key name
+          nullable: true
+        api_key_redacted:
+          type: string
+          description: API key redacted
+          nullable: true
+        api_key_type:
+          type: string
+          description: API key type
+          nullable: true
+        project_id:
+          type: string
+          description: Project ID
+          nullable: true
+        project_name:
+          type: string
+          description: Project name
+          nullable: true
+      required:
+        - organization_id
+        - organization_name
+        - aggregation_timestamp
+        - n_requests
+        - operation
+        - snapshot_id
+        - n_context_tokens_total
+        - n_generated_tokens_total
+    error_response:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/error_detail'
+      required:
+        - error
+    error_detail:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: "Missing query parameter 'date'"
+        type:
+          type: string
+          description: Error type
+          example: 'invalid_request_error'
+        param:
+          type: string
+          description: Error parameter
+          nullable: true
+        code:
+          type: integer
+          description: Error code
+          nullable: true
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field name
+              message:
+                type: string
+                description: Error message
+      required:
+        - message
+        - type
