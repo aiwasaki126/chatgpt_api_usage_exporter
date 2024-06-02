@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./example/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - default
+  exporter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - default
+networks:
+  default:
+    driver: bridge
