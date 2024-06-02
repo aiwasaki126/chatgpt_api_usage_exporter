@@ -8,7 +8,7 @@ on:
 
 jobs:
   release:
-    # PRがマージされたときのみ実行
+    # only run if the PR is merged
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
