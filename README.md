@@ -22,10 +22,10 @@ To use this exporter, you need to get the OpenAI API key from ChatGPT API dashbo
    export OPENAI_API_KEY=your_openai_api_key
    ```
 
-2. Run docker-compose.
+2. Run `docker-compose`.
 
    ```bash
-   docker-compose up
+   docker compose up
    ```
 
 3. Access `http://localhost:9090` to see the metrics on Prometheus dashboard.
